@@ -5,6 +5,9 @@ Copyright [2021] [Alex Santos Fraga]
 package com.asf.desafioCrud.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -26,17 +29,28 @@ public class CarDto implements Serializable {
 	@Length(min=1, max= 120, message="O tamanho deve ser entre 1 e 120 caracteres")
 	private String model;
 	
-	//@NotEmpty(message="Preenchimento Obrigatorio do tipo Double")
 	@NotNull(message="Preenchimento Obrigatorio do tipo Double")
 	private Double rent_price;
-
-	public CarDto() {}
 	
-	public CarDto(Car param) {
-		this.id =param.getId();
-		this.brand = param.getBrand();
-		this.model = param.getModel();
-		this.rent_price = param.getRentPrice();
+	//private List<RentedDto> rents = new ArrayList<>();
+
+	public CarDto() {  super(); }
+	
+	public CarDto(Integer id, String brand, String model, Double rent_price) {
+		super();
+		this.id = id;
+		this.brand = brand;
+		this.model = model;
+		this.rent_price = rent_price;
+	}
+	
+	public CarDto(Car car) {
+		super();
+		this.id =car.getId();
+		this.brand = car.getBrand();
+		this.model = car.getModel();
+		this.rent_price = car.getRent_price();
+		//this.setRents(param.getRents().stream().map( x -> new RentedDto(x) ).collect(Collectors.toList()));
 	}
 	
 	public Integer getId() {
@@ -73,5 +87,10 @@ public class CarDto implements Serializable {
 	public void setRent_price(String rent_price) {
 		this.rent_price = Double.parseDouble(rent_price);
 	}
-	
+
+
+	public Car parseObjDTOtoObj(CarDto param) {
+		return new Car(  param.getId(), param.getBrand(), param.getModel(),  param.getRent_price() );
+	}
+
 }

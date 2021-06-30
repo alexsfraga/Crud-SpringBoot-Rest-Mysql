@@ -5,36 +5,63 @@ Copyright [2021] [Alex Santos Fraga]
 package com.asf.desafioCrud.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.collection.internal.PersistentList;
+
+import com.asf.desafioCrud.dto.ClientDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Client implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-	@GenericGenerator(name = "native", strategy = "native")
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "gen_client")
+	@GenericGenerator(name = "gen_client", strategy = "native")
 	private Integer id;
 	
 	private String name;
 	private String email;
 
-	public Client() {super();}
+	@OneToMany( mappedBy = "client" )
+	private List<Rented> rents = new ArrayList<>();
 
+	public Client() { super(); }
+	
 	public Client(Integer id, String name, String email) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 	}
+	public Client( ClientDto clientDto  ) {
+		super();
+		this.id = clientDto.getId();
+		this.name = clientDto.getName();
+		this.email = clientDto.getEmail();
+	}
 
+	@JsonBackReference(value="rented-client")
+	public List<Rented> getRents() {
+		return rents;
+	}
+	public void setRents(List<Rented> rents) {
+		this.rents = rents;
+	}
 	public Integer getId() {
 		return id;
 	}

@@ -22,12 +22,22 @@ public class ClientDto implements Serializable {
 	@Email(message="Email invalido")
 	private String email;
 	
-	public  ClientDto() {}
+	//private List<RentedDto> rents = new ArrayList<>();
 	
-	public ClientDto(Client obj) {
-		id = obj.getId();
-		name = obj.getName();
-		email = obj.getEmail();
+	public  ClientDto() { super();}
+	
+	public ClientDto(Integer id, String name, String email) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+	}
+	
+	public ClientDto(Client param) {
+		super();
+		this.id = param.getId();
+		this.name = param.getName();
+		this.email = param.getEmail();
 	}
 
 	public Integer getId() {

@@ -14,10 +14,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.asf.desafioCrud.service.exceptions.DataIntegrityException;
 import com.asf.desafioCrud.domain.Car;
 import com.asf.desafioCrud.dto.CarDto;
 import com.asf.desafioCrud.repositories.CarRepository;
+import com.asf.desafioCrud.service.exceptions.DataIntegrityException;
 
 @Service
 public class CarService {
@@ -51,7 +51,7 @@ public class CarService {
 	private void parseDataObj(Car newObj, Car obj){
 		newObj.setBrand(obj.getBrand());
 		newObj.setModel(obj.getModel());
-		newObj.setRentPrice(obj.getRentPrice());
+		newObj.setRent_price(obj.getRent_price());
 	}
 	
 	public void delete(Car param) {
@@ -69,6 +69,7 @@ public class CarService {
 	}
 	
 	public Car parseObjDTOtoObj(CarDto param) {
-		return new Car(  param.getId(), param.getBrand(),  param.getModel(),  param.getRent_price() );
+		return new Car(  param.getId(), param.getBrand(), param.getModel(),  param.getRent_price() );
 	}
+
 }

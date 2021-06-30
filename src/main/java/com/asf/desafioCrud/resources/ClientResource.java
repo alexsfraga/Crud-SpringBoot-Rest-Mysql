@@ -34,30 +34,30 @@ public class ClientResource {
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> select(@PathVariable Integer id) throws ObjectNotFoundException {
-		Client obj = service.selectByID(id);
+		ClientDto obj =  service.selectByID(id);
 		return ResponseEntity.ok().body(obj);
 	}
 
 	@RequestMapping( method = RequestMethod.POST )
 	public ResponseEntity<?>  insert(@Valid @RequestBody ClientDto param) {
-		Client obj = service.create(param);
+		param = service.create( new Client(param) );
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-						.path("/{id}").buildAndExpand(obj.getId()).toUri();
+						.path("/{id}").buildAndExpand(param.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@RequestMapping(  value="/{id}"  , method = RequestMethod.PUT )
-	public ResponseEntity<Client>  update(@Valid @RequestBody ClientDto param , @PathVariable Integer id ) {
+	public ResponseEntity<ClientDto>  update(@Valid @RequestBody ClientDto param , @PathVariable Integer id ) {
 		param.setId(id);
-		Client obj = service.update(param);
+		param = new ClientDto( service.update(param) );
 		return ResponseEntity.noContent().build();
 	}
 	
 	@RequestMapping(  value="/{id}"  , method = RequestMethod.DELETE )
-	public ResponseEntity<?>  delete( @RequestBody Client param , @PathVariable Integer id ) {
+	public ResponseEntity<?>  delete( @RequestBody ClientDto param , @PathVariable Integer id ) {
 		param.setId(id);
-		service.delete(param);
+		service.delete( service.parseObjDTOtoObj(param) );
 		return ResponseEntity.noContent().build();
 	}
 	

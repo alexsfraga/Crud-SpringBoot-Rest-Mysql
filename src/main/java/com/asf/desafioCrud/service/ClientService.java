@@ -14,10 +14,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.asf.desafioCrud.service.exceptions.DataIntegrityException;
 import com.asf.desafioCrud.domain.Client;
 import com.asf.desafioCrud.dto.ClientDto;
 import com.asf.desafioCrud.repositories.ClientRepository;
+import com.asf.desafioCrud.service.exceptions.DataIntegrityException;
 
 @Service
 public class ClientService {
@@ -25,25 +25,25 @@ public class ClientService {
 	@Autowired
 	private ClientRepository repo;
 
-	public Client selectByID(Integer id) {
+	public ClientDto selectByID(Integer id) {
 		Optional<Client> obj = repo.findById(id);
 		if(obj.isEmpty()) {
 			throw new com.asf.desafioCrud.service.exceptions.ObjectNotFoundException("Objeto não encontrado, id : " + id);
 		}
-		return obj.get();
+		
+		return new ClientDto( obj.get() );
 	}
 	
 	public List<Client> selectAll(){
 		return repo.findAll();
 	}
-	public Client create(ClientDto param) {
-		Client client = new Client();
-		client = this.parseClientDTOtoCliente(param);
-		return repo.save(client);
+	public ClientDto create(Client param) {
+		//ClientDto obj = new Client(repo.save(param));
+		return new ClientDto( repo.save(param) );
 	}
 	public Client update(ClientDto param) {
-		Client obj = this.parseClientDTOtoCliente( param );
-		Client newObj = selectByID( obj.getId() );
+		Client obj = this.parseObjDTOtoObj( param );
+		Client newObj = this.parseObjDTOtoObj( selectByID( obj.getId() ) );
 			parseDataObj( newObj , obj );
 		return repo.save(newObj);
 	}
@@ -66,7 +66,7 @@ public class ClientService {
 		return repo.findAll(pageRequest);
 	}
 	
-	public Client parseClientDTOtoCliente(ClientDto param) {
+	public Client parseObjDTOtoObj(ClientDto param) {
 		return new Client(  param.getId(), param.getName(), param.getEmail() );
 	}
 	
