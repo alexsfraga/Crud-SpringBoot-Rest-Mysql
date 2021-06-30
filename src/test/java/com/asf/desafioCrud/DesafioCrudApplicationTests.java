@@ -1,4 +1,4 @@
-package com.asf.curso;
+package com.asf.desafioCrud;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
